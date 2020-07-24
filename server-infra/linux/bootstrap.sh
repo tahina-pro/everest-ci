@@ -124,13 +124,23 @@ Bootstrap ()
     # Verify PowerShell is not installed.
     if ! command -v pwsh > /dev/null 2>&1; then
         # Install Powershell, this will enable us to have the build definition to directly manage containers on azure.
-        # Import the public repository GPG keys
-        curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
+	# From https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-core-on-linux?view=powershell-6
+	# for Ubuntu 18.04
 
-        # Update the list of products
-        # Install PowerShell
-        apt-get update -y
-        apt-get install -y powershell
+	# Download the Microsoft repository GPG keys
+	wget -q https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb
+
+	# Register the Microsoft repository GPG keys
+	dpkg -i packages-microsoft-prod.deb
+
+	# Update the list of products
+	apt-get update
+
+	# Enable the "universe" repositories
+	add-apt-repository universe
+
+	# Install PowerShell
+	apt-get install -y powershell
 
         # Verify PowerShell was installed.
         if ! command -v pwsh > /dev/null 2>&1; then
