@@ -3,6 +3,7 @@
 # This script is responsible to do the complete setup in order to have build agents running on the linux build machine.
 
 set -e
+set -x
 
 vstsPat=$1
 poolName=${2:-Msr-EverestPool-Linux}
@@ -47,6 +48,9 @@ ConfigAgents ()
 
         # Now we setup the new agent.
         bash ./config.sh --unattended --url https://msr-project-everest.visualstudio.com --auth pat --token $vstsPat --pool $poolName --agent $agentName --acceptTeeEula
+
+	# The previous step created svc.sh. However, the service name was truncated, so we need to restore it here to avoid duplicates
+	sed -i 's!^SVC_NAME=.*$!SVC_NAME=$(systemd-escape --path "vsts.agent.msr-project-everest.'$poolName'.'$agentName'.service")!' svc.sh
 
         sudo bash ./svc.sh install >1
         sudo bash ./svc.sh start >1
