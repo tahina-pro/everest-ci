@@ -35,8 +35,10 @@ ConfigAgents ()
             cd /home/builder/build/agents/$agentName
 
             # Remove agents from a previous agent setup.
-            sudo bash ./svc.sh stop >1
-            sudo bash ./svc.sh uninstall >1
+	    if [[ -x svc.sh ]] ; then
+              sudo bash ./svc.sh stop >1
+              sudo bash ./svc.sh uninstall >1
+	    fi
             bash ./config.sh remove --auth pat --token $vstsPat
         fi
     else
@@ -57,7 +59,8 @@ Setup ()
 
     # Download VSTS linux agent
     cd /home/builder/build/agents
-    sudo curl -O https://vstsagentpackage.azureedge.net/agent/2.140.0/vsts-agent-linux-x64-2.140.0.tar.gz
+    agent_version=2.172.2
+    sudo curl -O https://vstsagentpackage.azureedge.net/agent/$agent_version/vsts-agent-linux-x64-$agent_version.tar.gz
 
     for i in $(seq $initialPoolIndex $finalPoolIndex)
     do
@@ -67,14 +70,14 @@ Setup ()
             # copy agent file to directory, if required and extract it.
             sudo mkdir $agentNumber
 
-            sudo cp  vsts-agent-linux-x64-2.140.0.tar.gz $agentNumber/vsts-agent-linux-x64-2.140.0.tar.gz
+            sudo cp  vsts-agent-linux-x64-$agent_version.tar.gz $agentNumber/vsts-agent-linux-x64-$agent_version.tar.gz
             cd $agentNumber
 
             # extract files.
-            sudo tar zxvf vsts-agent-linux-x64-2.140.0.tar.gz
+            sudo tar zxvf vsts-agent-linux-x64-$agent_version.tar.gz
 
             # compressed file.
-            sudo rm vsts-agent-linux-x64-2.140.0.tar.gz
+            sudo rm vsts-agent-linux-x64-$agent_version.tar.gz
             cd ..
         fi
 
@@ -86,14 +89,14 @@ Setup ()
             # copy agent file to directory, if required and extract it.
             sudo mkdir $agentNumber
 
-            sudo cp  vsts-agent-linux-x64-2.140.0.tar.gz $agentNumber/vsts-agent-linux-x64-2.140.0.tar.gz
+            sudo cp  vsts-agent-linux-x64-$agent_version.tar.gz $agentNumber/vsts-agent-linux-x64-$agent_version.tar.gz
             cd $agentNumber
 
             # extract files.
-            sudo tar zxvf vsts-agent-linux-x64-2.140.0.tar.gz
+            sudo tar zxvf vsts-agent-linux-x64-$agent_version.tar.gz
 
             # compressed file.
-            sudo rm vsts-agent-linux-x64-2.140.0.tar.gz
+            sudo rm vsts-agent-linux-x64-$agent_version.tar.gz
             cd ..
         fi
 
@@ -102,7 +105,7 @@ Setup ()
     done
 
     # Remove linux agent file.
-    sudo rm vsts-agent-linux-x64-2.140.0.tar.gz
+    sudo rm vsts-agent-linux-x64-$agent_version.tar.gz
 
     for i in $(seq $initialPoolIndex $finalPoolIndex)
     do
