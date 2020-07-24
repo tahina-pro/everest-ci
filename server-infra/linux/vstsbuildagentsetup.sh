@@ -6,7 +6,7 @@ vstsPat=$1
 poolName=${2:-Msr-EverestPool-Linux}
 poolNameOndemand=$(echo $poolName)-ondemand
 initialPoolIndex=${3:-1}
-finalPoolIndex=${3:-8}
+finalPoolIndex=${4:-8}
 
 echo PoolName = $poolName
 echo PoolNameOnDemand = $poolNameOndemand
