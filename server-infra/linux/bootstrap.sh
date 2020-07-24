@@ -3,6 +3,8 @@
 # This script is responsible to setup the linux build machine.
 # Run it if you need to setup or resetup the linux build server.
 
+set -e
+
 serviceUser=$1
 
 Bootstrap ()

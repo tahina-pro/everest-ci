@@ -2,6 +2,8 @@
 
 # This script is responsible to do the complete setup in order to have build agents running on the linux build machine.
 
+set -e
+
 vstsPat=$1
 poolName=${2:-Msr-EverestPool-Linux}
 poolNameOndemand=$(echo $poolName)-ondemand
